@@ -1,4 +1,5 @@
 MAIN_FILE = _e
+CC = g++
 
 all:
-	g++ $(MAIN_FILE).cpp -o $(MAIN_FILE)
+	$(CC) $(MAIN_FILE).cpp -o $(MAIN_FILE)

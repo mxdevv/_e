@@ -5,9 +5,16 @@
 #include <vector>
 #include <array>
 
+#include "src/func.h"
+
 #include "src/lang.cpp"
-#include "src/data.cpp"
+#include "src/consts.cpp"
+#include "src/esc.cpp"
+#include "src/structs.cpp"
+#include "src/pattern.cpp"
 #include "src/func.cpp"
+#include "src/interact.cpp"
+#include "src/data.cpp"
 #include "src/alg.cpp"
 
 using namespace _e;
@@ -27,7 +34,7 @@ int main(int argc, char* argv[])
 			case 'h': func::help(); break;
 			default:
 				data::file_name = argv[i];
-				func::open();
+				func::open_or_create();
 				break;
 		}
 	} else
@@ -36,10 +43,9 @@ int main(int argc, char* argv[])
 			case alg::hash("help"): func::help(); break;
 			default:
 				data::file_name = argv[i];
-				func::open();
+				func::open_or_create();
 				break;
 		}
 
-	data::ofs.close();
-	data::ifs.close();
+	//data::interactive(interact::edit);
 }
