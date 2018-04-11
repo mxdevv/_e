@@ -4,7 +4,10 @@
 namespace _e {
 namespace interact {
 
-void edit() { };
+void edit()
+{
+	;
+}
 
 } // interact
 } // _e

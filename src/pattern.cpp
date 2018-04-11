@@ -14,12 +14,17 @@ public:
 		func = f;
 		if (!is_run) {
 			is_run = 1;
-			while(1) {
+			while(is_run) {
 				prec_func();
 				func();
 				post_func();
 			}
 		}
+	}
+
+	void final()
+	{
+		is_run = 0;
 	}
 };
 

@@ -14,6 +14,11 @@ inline int get_cursor_xy(int& width, int& height);
 inline int get_term_size(int& width, int& height);
 void open_or_create();
 void help();
+void up_pos();
+void down_pos();
+void left_pos();
+void right_pos();
+inline void terminate();
 
 } // funcs
 } // _e

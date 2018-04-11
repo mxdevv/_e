@@ -13,6 +13,7 @@ std::ifstream ifs;
 char* file_name;
 std::vector<std::vector<char>> lines;
 structs::Coord pos { 1, 1 };
+structs::Coord term_size { 80, 36 };
 
 pattern::Interactive<func::getch, func::redraw> interactive;
 

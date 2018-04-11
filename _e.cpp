@@ -4,18 +4,23 @@
 #include <fstream>
 #include <vector>
 #include <array>
+#include <termios.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 #include "src/func.h"
 
 #include "src/lang.cpp"
 #include "src/consts.cpp"
-#include "src/esc.cpp"
+#include "src/term.cpp"
 #include "src/structs.cpp"
 #include "src/pattern.cpp"
 #include "src/func.cpp"
 #include "src/interact.cpp"
 #include "src/data.cpp"
 #include "src/alg.cpp"
+#include "src/keybind.cpp"
 
 using namespace _e;
 
@@ -46,6 +51,15 @@ int main(int argc, char* argv[])
 				func::open_or_create();
 				break;
 		}
+	
+	term::init();
+	term::nocanon_mode();
+	term::clr_scr();
+	func::redraw();
 
-	//data::interactive(interact::edit);
+	data::interactive(interact::edit);
+	
+	term::default_mode();
+	term::clr_scr();
+	term::move_cursor(1, 1);
 }
