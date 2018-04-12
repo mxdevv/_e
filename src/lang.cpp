@@ -4,19 +4,21 @@
 namespace _e {
 namespace lang {
 
-constexpr char no_arguments[] =
+const char* no_arguments =
 "Аргументов нет. Завершение.";
 
-constexpr char too_arguments[] =
+const char* too_arguments =
 "Слишком много аргументов.";
 
-constexpr char help[] =
-"Использовать: _e [ФАЙЛ НА ОТКРЫТИЕ] [АРГУМЕНТЫ]\n\
-_e - терминальный редактор текста адаптированный под код.\n\
-\n\
-Аргументы:\n\
-  -h, help                             вызвать справку."
-;
+const char* help =
+"Использовать: _e [ФАЙЛ НА ОТКРЫТИЕ] [АРГУМЕНТЫ]\n"
+"_e - терминальный редактор текста адаптированный под код.\n"
+"\n"
+"Аргументы:\n"
+"  -h, help                             вызвать справку.";
+
+const char* move_view =
+"Просмотр";
 
 } // lang
 } // _e

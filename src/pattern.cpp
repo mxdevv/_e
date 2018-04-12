@@ -4,7 +4,6 @@
 namespace _e {
 namespace pattern {
 
-template<void (*prec_func)(), void (*post_func)()>
 class Interactive {
 	void (*func)();
 	bool is_run = 0;
@@ -14,17 +13,28 @@ public:
 		func = f;
 		if (!is_run) {
 			is_run = 1;
-			while(is_run) {
-				prec_func();
+			while(is_run)
 				func();
-				post_func();
-			}
 		}
 	}
 
-	void final()
+	inline void final()
 	{
 		is_run = 0;
+	}
+};
+
+// не дописано, в процессе
+template<typename T>
+class Store {
+	T current;
+public:
+	T previous;
+
+	void operator = (T t)
+	{ 
+		previous = current;
+		current = t;
 	}
 };
 

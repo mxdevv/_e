@@ -7,65 +7,25 @@
 namespace _e {
 namespace func {
 
-void getch()
-{
-	static int c = 0;
-	c = getchar();
-	if (c == 27) // esc
-	{
-		c = getchar();
-		if (c == '[')
-		{
-			c = getchar();
-			switch(c)
-			{
-				case 'A': // up
-					keybind::up_arrow(); break;
-				case 'B': // down
-					keybind::down_arrow(); break;
-				case 'C': // right
-					keybind::right_arrow(); break;
-				case 'D': // left
-					keybind::left_arrow(); break;
-				default:
-					break;
-			}
-		}
-	} else switch(c)
-	{
-		case 'q':
-			keybind::q(); break;
-	}
-}
-
-void redraw()
+void redraw_lines()
 {
 	term::hide_cursor();
 
-	for(int i = 0; i < data::term_size.y
+	for(int i = 0; i < data::term_size.y - 1
 			&& i < data::lines.size(); i++) {
 		term::move_cursor(1, i + 1);
 		for(int j = 0; j < data::lines[i].size(); j++) {
-			std::cout << data::lines[i][j];
+			putc(data::lines[i][j], stdout);
 		}
 	}
 	for(int i = data::lines.size(); i < data::term_size.y; i++)
 	{
 		term::move_cursor(1, i);
-		std::cout << "~";
+		putc('~', stdout);
 	}
 
 	term::move_cursor(data::pos.x, data::pos.y);
 	term::show_cursor();
-}
-
-void cat()
-{
-	for(auto& v : data::lines) {
-		for(auto& ch : v)
-			std::cout << ch;
-		std::cout << '\n';
-	}
 }
 
 void open_or_create()
@@ -84,7 +44,7 @@ void open_or_create()
 				data::lines.back().push_back(ch);
 		}
 	} else {
-		std::cout << "Файла нет.\n";
+		fputs("Файла нет.\n", stdout);
 	}
 
 	data::ifs.close();
@@ -92,7 +52,8 @@ void open_or_create()
 
 void help()
 {
-	std::cout << lang::help << '\n';
+	fputs(lang::help, stdout);
+	putc('\n', stdout);
 }
 
 void correct_x()

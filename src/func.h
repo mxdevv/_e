@@ -4,9 +4,7 @@
 namespace _e {
 namespace func {
 
-void getch();
-void redraw();
-void cat();
+void redraw_lines();
 inline void esc(auto val);
 inline void clr_scr();
 inline void move_xy(int x, int y);

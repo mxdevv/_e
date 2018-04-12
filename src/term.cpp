@@ -4,25 +4,6 @@
 namespace _e {
 namespace term {
 
-struct termios newt, oldt;
-
-void init()
-{
-	tcgetattr(STDIN_FILENO, &oldt);
-	newt = oldt;
-	newt.c_lflag &= ~(ICANON | ECHO);
-}
-
-void nocanon_mode()
-{
-	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-}
-
-void default_mode()
-{
-	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-}
-
 // ESC
 #define ESC "\e["
 
@@ -81,6 +62,26 @@ inline void show_cursor()
 inline void hide_cursor()
 {
 	fputs(ESC "?25l", stdout);
+}
+// end ESC
+
+struct termios newt, oldt;
+
+void init()
+{
+	tcgetattr(STDIN_FILENO, &oldt);
+	newt = oldt;
+	newt.c_lflag &= ~(ICANON | ECHO);
+}
+
+void nocanon_mode()
+{
+	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+}
+
+void default_mode()
+{
+	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
 }
 
 } // term
