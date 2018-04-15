@@ -4,4 +4,4 @@
 constexpr size_t constexpr_strlen(const char* chs)
 	{ return strlen(chs); }
 
-#endif
+#endif // _E_CONSTEXPR_CPP

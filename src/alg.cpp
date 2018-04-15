@@ -34,4 +34,4 @@ constexpr unsigned int hash(const char chs[])
 } // alg
 } // _e
 
-#endif
+#endif // _E_ALG_CPP

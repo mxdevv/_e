@@ -87,4 +87,4 @@ void default_mode()
 } // term
 } // _e
 
-#endif
+#endif // _E_TERM_CPP

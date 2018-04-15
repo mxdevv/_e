@@ -54,8 +54,9 @@ int main(int argc, char* argv[])
 	term::init();
 	term::nocanon_mode();
 	term::get_term_size(data::term_size.x, data::term_size.y);
+	data::text_view_size.x = data::term_size.x;
+	data::text_view_size.y = data::term_size.y - 1;
 	term::clr_scr();
-	//func::redraw_lines();
 
 	data::interactive(interact::hello);
 	

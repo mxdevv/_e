@@ -21,4 +21,4 @@ inline void terminate();
 } // funcs
 } // _e
 
-#endif
+#endif // _E_FUNCS_H

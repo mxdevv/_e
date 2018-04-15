@@ -11,14 +11,14 @@ void redraw_lines()
 {
 	term::hide_cursor();
 
-	for(int i = 0; i < data::term_size.y - 1
+	for(int i = 0; i < data::text_view_size.y
 			&& i < data::lines.size(); i++) {
 		term::move_cursor(1, i + 1);
 		for(int j = 0; j < data::lines[i].size(); j++) {
 			putc(data::lines[i][j], stdout);
 		}
 	}
-	for(int i = data::lines.size(); i < data::term_size.y; i++)
+	for(int i = data::lines.size(); i <= data::text_view_size.y; i++)
 	{
 		term::move_cursor(1, i);
 		putc('~', stdout);
@@ -96,4 +96,4 @@ inline void terminate()
 } // funcs
 } // _e
 
-#endif
+#endif // _E_FUNCS_CPP

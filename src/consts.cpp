@@ -7,4 +7,4 @@ namespace _e {
 
 } // _e
 
-#endif
+#endif // _E_CONSTS_CPP

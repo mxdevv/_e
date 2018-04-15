@@ -9,4 +9,4 @@ struct Coord { int x, y; };
 } // structs
 } // _e
 
-#endif
+#endif // _E_STRUCT_CPP

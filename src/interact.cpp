@@ -6,7 +6,27 @@ namespace interact {
 
 int c = 0;
 
-void view()
+void flash_hello_f();
+void hello_f();
+void flash_view_f();
+void view_f();
+void flash_edit_f();
+void edit_f();
+
+pattern::Flash hello(flash_hello_f, hello_f);
+pattern::Flash view(flash_view_f, view_f);
+pattern::Flash edit(flash_edit_f, edit_f);
+
+void flash_view_f()
+{
+	data::status = lang::mode_view;
+	term::move_cursor(2, data::term_size.y);
+	term::format(term::format::bright);
+	fputs(data::status, stdout);
+	term::format(term::format::reset);
+}
+
+void view_f()
 {
 	c = getchar();
 	if (c == 27) /* esc */ {
@@ -22,13 +42,47 @@ void view()
 		}
 	} else switch(c) {
 		case 'q': func::terminate(); break;
+		case 'e': data::interactive(edit); break;
 	}
 	
-	//redraw
 	func::redraw_lines();
 }
 
-void hello()
+void flash_edit_f()
+{
+	data::status = lang::mode_edit;
+	term::move_cursor(2, data::term_size.y);
+	term::format(term::format::bright);
+	term::fg_color(term::fg_color::magenta);
+	fputs(data::status, stdout);
+	term::format(term::format::reset);
+}
+
+void edit_f()
+{
+	c = getchar();
+	if (c == 27) /* esc */ {
+		c = getchar();
+		if (c == '[') {
+			c = getchar();
+			switch(c) {
+				case 'A': func::up_pos(); break; // up
+				case 'B': func::down_pos(); break; // down
+				case 'C': func::right_pos(); break; // right
+				case 'D': func::left_pos(); break; // left
+			}
+		} else data::interactive(view);
+	} else switch(c) {
+		case 'q': func::terminate(); break;
+	}
+	
+	func::redraw_lines();
+}
+
+void flash_hello_f()
+	{ }
+
+void hello_f()
 {
 	func::redraw_lines();
 	term::hide_cursor();
@@ -54,15 +108,10 @@ void hello()
 
 	term::clr_scr();
 
-	data::status = lang::move_view;
-	term::move_cursor(2, data::term_size.y);
-	term::format(term::format::bright);
-	fputs(data::status, stdout);
-	term::format(term::format::reset);
 	data::interactive(view);
 }
 
 } // interact
 } // _e
 
-#endif
+#endif // _E_INTERACT_CPP

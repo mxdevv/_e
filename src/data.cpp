@@ -11,11 +11,13 @@ char* file_name;
 std::vector<std::vector<char>> lines;
 const char* status;
 structs::Coord pos { 1, 1 };
-structs::Coord term_size;;
+pattern::Store<int> shift(0, 0);
+structs::Coord term_size;
+structs::Coord text_view_size;
 
-pattern::Interactive interactive;
+pattern::Interactive<pattern::Flash> interactive;
 
 } // data
 } // _e
 
-#endif
+#endif // _E_DATA_CPP
