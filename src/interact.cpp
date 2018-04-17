@@ -19,11 +19,13 @@ pattern::Flash edit(flash_edit_f, edit_f);
 
 void flash_view_f()
 {
-	data::status = lang::mode_view;
+	term::hide_cursor();
+	data::status_bar = lang::mode_view;
 	term::move_cursor(2, data::term_size.y);
 	term::format(term::format::bright);
-	fputs(data::status, stdout);
+	fputs(data::status_bar[data::status_bar.current], stdout);
 	term::format(term::format::reset);
+	func::clear_previous_status();
 }
 
 void view_f()
@@ -44,18 +46,23 @@ void view_f()
 		case 'q': func::terminate(); break;
 		case 'e': data::interactive(edit); break;
 	}
-	
+
+	term::hide_cursor();	
 	func::redraw_lines();
+	func::place_cursor();
+	term::show_cursor();
 }
 
 void flash_edit_f()
 {
-	data::status = lang::mode_edit;
+	term::hide_cursor();
+	data::status_bar = lang::mode_edit;
 	term::move_cursor(2, data::term_size.y);
 	term::format(term::format::bright);
 	term::fg_color(term::fg_color::magenta);
-	fputs(data::status, stdout);
+	fputs(data::status_bar[data::status_bar.current], stdout);
 	term::format(term::format::reset);
+	func::clear_previous_status();
 }
 
 void edit_f()
@@ -75,8 +82,11 @@ void edit_f()
 	} else switch(c) {
 		case 'q': func::terminate(); break;
 	}
-	
+
+	term::hide_cursor();	
 	func::redraw_lines();
+	func::place_cursor();
+	term::show_cursor();
 }
 
 void flash_hello_f()
@@ -84,8 +94,8 @@ void flash_hello_f()
 
 void hello_f()
 {
-	func::redraw_lines();
 	term::hide_cursor();
+	func::redraw_lines();
 	term::fg_color(term::fg_color::magenta);
 
 	std::array<const char*, 5> message {
@@ -99,7 +109,7 @@ void hello_f()
 	for(int i = 0; i < message.size(); i++)
 	{
 		term::move_cursor(
-				data::term_size.x / 2 - constexpr_strlen(message[i]) / 3, y + i);
+				data::term_size.x / 2 - alg::utf8_strlen(message[i]) / 2, y + i);
 		fputs(message[i], stdout);
 	}
 

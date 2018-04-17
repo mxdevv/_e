@@ -94,7 +94,7 @@ public:
 		_current = t;
 	}
 
-	constexpr T operator [] (get g)
+	constexpr T& operator [] (get g)
 	{
 		if (g == previous) return _previous;
 		if (g == current) return _current;

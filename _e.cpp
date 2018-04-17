@@ -7,16 +7,14 @@
 
 #include "src/func.h"
 
-#include "src/constexpr.cpp"
+#include "src/alg.cpp"
 #include "src/lang.cpp"
-#include "src/consts.cpp"
 #include "src/structs.cpp"
 #include "src/pattern.cpp"
 #include "src/term.cpp"
 #include "src/func.cpp"
 #include "src/data.cpp"
 #include "src/interact.cpp"
-#include "src/alg.cpp"
 #include "src/keybind.cpp"
 
 using namespace _e;

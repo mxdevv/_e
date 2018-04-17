@@ -5,6 +5,8 @@ namespace _e {
 namespace func {
 
 void redraw_lines();
+void clear_previous_status();
+void place_cursor();
 inline void esc(auto val);
 inline void clr_scr();
 inline void move_xy(int x, int y);

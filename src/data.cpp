@@ -9,7 +9,7 @@ std::ifstream ifs;
 
 char* file_name;
 std::vector<std::vector<char>> lines;
-const char* status;
+pattern::Store<const char*> status_bar(" ", " ");
 structs::Coord pos { 1, 1 };
 pattern::Store<int> shift(0, 0);
 structs::Coord term_size;

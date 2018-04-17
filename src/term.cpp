@@ -4,7 +4,6 @@
 namespace _e {
 namespace term {
 
-// ESC
 #define ESC "\e["
 
 enum struct format {
