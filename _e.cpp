@@ -8,14 +8,15 @@
 #include "src/func.h"
 
 #include "src/alg.cpp"
+#include "src/clas.cpp"
 #include "src/lang.cpp"
-#include "src/structs.cpp"
-#include "src/pattern.cpp"
 #include "src/term.cpp"
-#include "src/func.cpp"
+#include "src/struc.cpp"
+#include "src/pattern.cpp"
+#include "src/highlight.cpp"
 #include "src/data.cpp"
+#include "src/func.cpp"
 #include "src/interact.cpp"
-#include "src/keybind.cpp"
 
 using namespace _e;
 
@@ -23,7 +24,7 @@ int main(int argc, char* argv[])
 {
 	if (argc < 2) {
 		fputs("_e: ", stdout);
-		fputs(lang::no_arguments, stdout);
+		fputs(lang::no_arguments.cstr(), stdout);
 		putc('\n', stdout);
 		return -1;
 	}
@@ -37,6 +38,7 @@ int main(int argc, char* argv[])
 			default:
 				data::file_name = argv[i];
 				func::open_or_create();
+				func::gen_highlight();
 				break;
 		}
 	} else
@@ -46,6 +48,7 @@ int main(int argc, char* argv[])
 			default:
 				data::file_name = argv[i];
 				func::open_or_create();
+				func::gen_highlight();
 				break;
 		}
 	
@@ -54,11 +57,11 @@ int main(int argc, char* argv[])
 	term::get_term_size(data::term_size.x, data::term_size.y);
 	data::text_view_size.x = data::term_size.x;
 	data::text_view_size.y = data::term_size.y - 1;
-	term::clr_scr();
+	func::clear_all();
 
 	data::interactive(interact::hello);
 	
+	func::clear_all();
 	term::default_mode();
-	term::clr_scr();
 	term::move_cursor(1, 1);
 }

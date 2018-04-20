@@ -4,7 +4,7 @@
 namespace _e {
 namespace func {
 
-void redraw_lines();
+void redraw_text_view();
 void clear_previous_status();
 void place_cursor();
 inline void esc(auto val);

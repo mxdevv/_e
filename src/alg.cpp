@@ -40,10 +40,35 @@ constexpr unsigned int hash(const char* chs)
 	return hash;
 }
 
-/*int substr(std::string sampl, std::string str)
+std::vector<int> substr(const char* sampl, const char* sourc)
 {
-	;
-}*/
+	int i = 0, j = 0;
+	std::vector<int> v;
+	for(; sourc[j] != '\0'; j++)
+	{
+		if (sampl[i] == sourc[j]) i++;
+		if (sampl[i] == '\0') {
+			v.push_back(j);
+			i = 0;
+		}
+	}
+	return v;
+}
+
+std::vector<int> substr(const char* sampl, std::vector<char>& sourc)
+{
+	int i = 0, j = 0;
+	std::vector<int> v;
+	for(; sourc.size() > j; j++)
+	{
+		if (sampl[i] == sourc[j]) i++;
+		if (sampl[i] == '\0') {
+			v.push_back(j);
+			i = 0;
+		}
+	}
+	return v;
+}
 
 } // alg
 } // _e

@@ -4,18 +4,18 @@
 namespace _e {
 namespace lang {
 
-const char* no_arguments = "Аргументов нет. Завершение.";
-const char* too_arguments = "Слишком много аргументов.";
+constexpr clas::utf8_string no_arguments( "Аргументов нет. Завершение." );
+constexpr clas::utf8_string too_arguments( "Слишком много аргументов." );
 
-const char* help =
+constexpr clas::utf8_string help(
 "Использовать: _e [ФАЙЛ НА ОТКРЫТИЕ] [АРГУМЕНТЫ]\n"
 "_e - терминальный редактор текста адаптированный под код.\n"
 "\n"
 "Аргументы:\n"
-"  -h, help                             вызвать справку.";
+"  -h, help                             вызвать справку." );
 
-const char* mode_view = "Просмотр";
-const char* mode_edit = "Вставка";
+constexpr clas::utf8_string mode_view( "Просмотр" );
+constexpr clas::utf8_string mode_edit( "Вставка" );
 
 } // lang
 } // _e

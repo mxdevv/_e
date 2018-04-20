@@ -6,26 +6,26 @@ namespace term {
 
 #define ESC "\e["
 
-enum struct format {
+enum struct Format {
 	reset = 0, bright, dim, underscope, blink, reverse, hidden };
 
-enum struct fg_color {
+enum struct Fg_color {
 	black = 30, red, green, yellow, blue, magenta, cyan, white };
 
-enum struct bg_color {
+enum struct Bg_color {
 	black = 40, red, green, yellow, blue, magenta, cyan, white };
 
-inline void fg_color(fg_color clr)
+inline void fg_color(Fg_color clr)
 {
 	printf(ESC "%dm", clr);
 }
 
-inline void bg_color(bg_color clr)
+inline void bg_color(Bg_color clr)
 {
 	printf(ESC "%dm", clr);
 }
 
-inline void format(format frmt)
+inline void format(Format frmt)
 {
 	printf(ESC "%dm", frmt);
 }
