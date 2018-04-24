@@ -4,7 +4,7 @@
 namespace _e {
 namespace alg {
 
-constexpr size_t utf8_strlen(const char* cstr)
+/*constexpr size_t utf8_strlen(const char* cstr)
 {
 	size_t c = 0, q = 0;
 	for(const char* p = cstr; *p != '\0'; p++)
@@ -16,7 +16,7 @@ constexpr size_t utf8_strlen(const char* cstr)
 		else if      ((*p & 0b11111'000) == 0b11110'000) { c++; q = 3; continue; }
 	}
 	return (q != 0 ? 0 : c);
-}
+}*/
 
 constexpr auto pow(auto a, auto n)
 {
@@ -40,7 +40,7 @@ constexpr unsigned int hash(const char* chs)
 	return hash;
 }
 
-std::vector<int> substr(const char* sampl, const char* sourc)
+/*std::vector<int> substr(const char* sampl, const char* sourc)
 {
 	int i = 0, j = 0;
 	std::vector<int> v;
@@ -53,9 +53,10 @@ std::vector<int> substr(const char* sampl, const char* sourc)
 		}
 	}
 	return v;
-}
+}*/
 
-std::vector<int> substr(const char* sampl, std::vector<char>& sourc)
+/*template<typename Container>
+std::vector<int> substr(const char* sampl, Container& sourc)
 {
 	int i = 0, j = 0;
 	std::vector<int> v;
@@ -66,6 +67,23 @@ std::vector<int> substr(const char* sampl, std::vector<char>& sourc)
 			v.push_back(j);
 			i = 0;
 		}
+	}
+	return v;
+}*/
+
+std::vector<int> substr(const char* sampl, std::vector<struc::Color_ch>& sourc)
+{
+	int i = 0, j = 0;
+	std::vector<int> v;
+	for(; sourc.size() > j; j++)
+	{
+		if (sampl[i] == sourc[j].ch) {
+			i++;
+			if (sampl[i] == '\0') {
+				v.push_back(j);
+				i = 0;
+			}
+		} else i = 0;
 	}
 	return v;
 }

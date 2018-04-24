@@ -4,18 +4,20 @@
 namespace _e {
 namespace lang {
 
-constexpr clas::utf8_string no_arguments( "Аргументов нет. Завершение." );
-constexpr clas::utf8_string too_arguments( "Слишком много аргументов." );
+const std::string no_arguments( "No arguments. Exit." );
+const std::string too_arguments( "Too many arguments." );
+const std::string dont_have_file( "Don't have file." );
 
-constexpr clas::utf8_string help(
-"Использовать: _e [ФАЙЛ НА ОТКРЫТИЕ] [АРГУМЕНТЫ]\n"
-"_e - терминальный редактор текста адаптированный под код.\n"
+const std::string help(
+"Use: _e [FILE TO OPEN] [ARGUMENTS]\n"
+"_e - terminal text editor adapted to the code.\n"
 "\n"
-"Аргументы:\n"
-"  -h, help                             вызвать справку." );
+"Arguments:\n"
+"  -h, help                             call help." );
 
-constexpr clas::utf8_string mode_view( "Просмотр" );
-constexpr clas::utf8_string mode_edit( "Вставка" );
+const std::string mode_view( "View" );
+const std::string mode_edit( "Edit" );
+const std::string mode_insert( "Insert" );
 
 } // lang
 } // _e

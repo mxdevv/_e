@@ -4,28 +4,34 @@
 namespace _e {
 namespace clas {
 
-class utf8_string {
-	const char* _cstr;
-	size_t _size;
+/*class Text {
 public:
-	constexpr utf8_string(const char* cstr)
-		: _cstr(cstr), _size(alg::utf8_strlen(cstr))
-		{ }
+	using value_type = std::vector<struc::Color_ch>;
 
-	inline void operator = (const char* cstr)
-	{
-		_cstr = cstr;
-		_size = alg::utf8_strlen(_cstr);
-	}
+private:
+	std::vector<value_type> data;
 
-	inline size_t size() const
-		{ return _size; }
+public:
+	inline auto back()
+		{ return data.back(); }
 
-	inline const char* cstr() const
-		{ return _cstr; }
+	inline auto begin()
+		{ return data.begin(); }
 
-	inline const char operator [] (size_t n) const
-		{ return _cstr[n]; }
+	inline auto& operator [] (size_t n)
+		{ return data[n]; }
+
+	inline size_t size()
+		{ return data.size(); }
+
+	inline void push_back(std::vector<struc::Color_ch> val)
+		{ data.push_back(val); }
+};*/
+
+class Text : public std::vector<std::vector<struc::Color_ch>> { 
+public:
+	inline void new_ln()
+		{ this->push_back( { } ); }
 };
 
 } // clas

@@ -10,7 +10,7 @@ enum struct Format {
 	reset = 0, bright, dim, underscope, blink, reverse, hidden };
 
 enum struct Fg_color {
-	black = 30, red, green, yellow, blue, magenta, cyan, white };
+	black = 30, red, green, yellow, blue, magenta, cyan, white = 0 };
 
 enum struct Bg_color {
 	black = 40, red, green, yellow, blue, magenta, cyan, white };

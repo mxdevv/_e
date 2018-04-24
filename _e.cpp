@@ -5,13 +5,15 @@
 #include <termios.h>
 #include <unistd.h>
 
+#include "src/config.h"
+
 #include "src/func.h"
 
-#include "src/alg.cpp"
-#include "src/clas.cpp"
-#include "src/lang.cpp"
 #include "src/term.cpp"
 #include "src/struc.cpp"
+#include "src/clas.cpp"
+#include "src/alg.cpp"
+#include "src/lang.cpp"
 #include "src/pattern.cpp"
 #include "src/highlight.cpp"
 #include "src/data.cpp"
@@ -24,7 +26,7 @@ int main(int argc, char* argv[])
 {
 	if (argc < 2) {
 		fputs("_e: ", stdout);
-		fputs(lang::no_arguments.cstr(), stdout);
+		fputs(lang::no_arguments.c_str(), stdout);
 		putc('\n', stdout);
 		return -1;
 	}
@@ -38,7 +40,7 @@ int main(int argc, char* argv[])
 			default:
 				data::file_name = argv[i];
 				func::open_or_create();
-				func::gen_highlight();
+				func::update_highlight();
 				break;
 		}
 	} else
@@ -48,15 +50,17 @@ int main(int argc, char* argv[])
 			default:
 				data::file_name = argv[i];
 				func::open_or_create();
-				func::gen_highlight();
+				func::update_highlight();
 				break;
 		}
 	
 	term::init();
 	term::nocanon_mode();
 	term::get_term_size(data::term_size.x, data::term_size.y);
-	data::text_view_size.x = data::term_size.x;
-	data::text_view_size.y = data::term_size.y - 1;
+	data::text_location.first.x = 1;
+	data::text_location.first.y = 1;
+	data::text_location.second.x = data::term_size.x;
+	data::text_location.second.y = data::term_size.y - 1;
 	func::clear_all();
 
 	data::interactive(interact::hello);

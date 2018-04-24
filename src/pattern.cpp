@@ -92,6 +92,9 @@ public:
 	Store(T previous, T current)
 		: _previous(previous), _current(current) { }
 
+	inline void store()
+		{ _previous = _current; }
+
 	inline void operator = (T t)
 		{ _set(t); }
 
