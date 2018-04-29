@@ -17,7 +17,7 @@ const std::string help(
 
 const std::string mode_view( "View" );
 const std::string mode_edit( "Edit" );
-const std::string mode_insert( "Insert" );
+const std::string mode_replace( "Replace" );
 
 } // lang
 } // _e

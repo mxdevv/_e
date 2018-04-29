@@ -9,18 +9,22 @@ std::ifstream ifs;
 
 pattern::Interactive<pattern::Flash> interactive;
 
-char* file_name;
+                               char* file_name;
+                          clas::Text text;
+         pattern::Store<const char*> status_bar (" ");
 
-//std::vector<std::vector<struc::Color_ch>> text;
-clas::Text text;
+                        struc::Coord pos_cursor { 1, 1 };
+                 pattern::Store<int> shift      (0);
 
-struc::Coord pos_cursor { 1, 1 };
-pattern::Store<int> shift(0, 0);
+                        struc::Coord term_size;
+                     struc::Location text_location;
 
-struc::Coord term_size;
-struc::Location text_location;
+///////////////////////////////////////////////////////////////////////////////
 
-pattern::Store<const char*> status_bar(" ", " ");
+const size_t page_step = 20;
+const size_t tab_size  = 2;
+const size_t down_pos_limit = 6;
+const size_t up_pos_limit = 6;
 
 } // data
 } // _e

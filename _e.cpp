@@ -9,14 +9,15 @@
 
 #include "src/func.h"
 
+#include "src/parse.cpp"
 #include "src/term.cpp"
 #include "src/struc.cpp"
 #include "src/clas.cpp"
 #include "src/alg.cpp"
 #include "src/lang.cpp"
 #include "src/pattern.cpp"
-#include "src/highlight.cpp"
 #include "src/data.cpp"
+#include "src/highlight.cpp"
 #include "src/func.cpp"
 #include "src/interact.cpp"
 
@@ -40,7 +41,7 @@ int main(int argc, char* argv[])
 			default:
 				data::file_name = argv[i];
 				func::open_or_create();
-				func::update_highlight();
+				highlight::update();
 				break;
 		}
 	} else
@@ -50,7 +51,7 @@ int main(int argc, char* argv[])
 			default:
 				data::file_name = argv[i];
 				func::open_or_create();
-				func::update_highlight();
+				highlight::update();
 				break;
 		}
 	
@@ -66,6 +67,7 @@ int main(int argc, char* argv[])
 	data::interactive(interact::hello);
 	
 	func::clear_all();
-	term::default_mode();
+	term::format(term::Format::reset);
 	term::move_cursor(1, 1);
+	term::default_mode();
 }

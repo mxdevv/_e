@@ -29,23 +29,25 @@ void redraw_text_view()
 {
 	clear_text_view();
 
-	struc::Color_ch& cur_col_ch = data::text[0][0];
-	term::fg_color(cur_col_ch.fg);
-	term::bg_color(cur_col_ch.bg);
-	
+	pattern::Store<struc::Color_ch*> cur_col_ch = new struc::Color_ch;
+	term::fg_color(cur_col_ch.current()->colors.fg);
+	term::bg_color(cur_col_ch.current()->colors.bg);
+
 	for(int i = data::shift.current();
 			i < data::text_location.second.y + data::shift && i < data::text.size();
 			i++)
 	{
 		term::move_cursor(1, i + 1 - data::shift);
 		for(int j = 0; j < data::text[i].size(); j++) {
-			// lazy coloring
-			if (   data::text[i][j].fg != cur_col_ch.fg
-					|| data::text[i][j].bg != cur_col_ch.bg)
+			
+			// присваивание, которое можно оптимизировать
+			cur_col_ch = &data::text[i][j];
+			
+			if (cur_col_ch.previous()->colors.fg != cur_col_ch.current()->colors.fg
+				|| cur_col_ch.previous()->colors.bg != cur_col_ch.current()->colors.bg)
 			{
-				cur_col_ch = data::text[i][j];
-				term::fg_color(cur_col_ch.fg);
-				term::bg_color(cur_col_ch.bg);
+				term::fg_color(cur_col_ch.current()->colors.fg);
+				term::bg_color(cur_col_ch.current()->colors.bg);
 			}
 
 			putc(data::text[i][j].ch, stdout);
@@ -85,7 +87,7 @@ void place_cursor()
 void open_or_create()
 {
 	data::ifs.open(data::file_name);
-	
+
 	if (data::ifs.is_open()) {
 		data::text.new_ln();
 
@@ -94,6 +96,9 @@ void open_or_create()
 			data::ifs.get(ch);
 			if (ch == '\n')
 				data::text.new_ln();
+			else if (ch == '\t')
+				for(int i = data::tab_size; i-->0;)
+					data::text.back().push_back( { ' ' } );
 			else
 				data::text.back().push_back( { ch } );
 		}
@@ -102,47 +107,10 @@ void open_or_create()
 		putc('\n', stdout);
 	}
 
+	// удаляет лишнюю пустую строку
+	if (!data::text.empty()) data::text.resize(data::text.size() - 1);
+
 	data::ifs.close();
-}
-
-void highlight_keywords()
-{
-	std::vector<int> v;
-	for(int i = 0; i < highlight::keywords.size(); i++)
-	{
-		for(int j = 0; j < data::text.size(); j++)
-		{
-			v = alg::substr(highlight::keywords[i].word, data::text[j]);
-			for(int k = 0; k < v.size(); k++)
-			for(int w = strlen(highlight::keywords[i].word); w > 0; w--) {
-				data::text[j][v[k] - w + 1].bg = highlight::keywords[i].bg;
-				data::text[j][v[k] - w + 1].fg = highlight::keywords[i].fg;
-			}
-		}
-	}
-}
-
-void highlight_operators()
-{
-	std::vector<int> v;
-	for(int i = 0; i < highlight::operators.size(); i++)
-	{
-		for(int j = 0; j < data::text.size(); j++)
-		{
-			v = alg::substr(highlight::operators[i].operat, data::text[j]);
-			for(int k = 0; k < v.size(); k++)
-			for(int w = strlen(highlight::operators[i].operat); w > 0; w--) {
-				data::text[j][v[k] - w + 1].bg = highlight::operators[i].bg;
-				data::text[j][v[k] - w + 1].fg = highlight::operators[i].fg;
-			}
-		}
-	}
-}
-
-void update_highlight()
-{
-	highlight_keywords();
-	highlight_operators();
 }
 
 void help()
@@ -154,7 +122,7 @@ void help()
 void correct_x()
 {
 	if (data::text[data::pos_cursor.y - 1].size() < data::pos_cursor.x)
-		data::pos_cursor.x = data::text[data::pos_cursor.y - 1].size();
+		data::pos_cursor.x = data::text[data::pos_cursor.y - 1].size() + 1;
 }
 
 void up_pos()
@@ -162,8 +130,8 @@ void up_pos()
 	if (data::pos_cursor.y > 1)
 		data::pos_cursor.y--;
 	correct_x();
-	if (data::pos_cursor.y <= data::shift.current())
-		data::shift--;
+	if (data::pos_cursor.y - data::up_pos_limit <= data::shift.current())
+		if (data::shift > 0) data::shift--;
 }
 
 void down_pos()
@@ -171,7 +139,8 @@ void down_pos()
 	if (data::text.size() - 1 > data::pos_cursor.y)
 		data::pos_cursor.y++;
 	correct_x();
-	if (data::pos_cursor.y + 6 > data::text_location.second.y + data::shift)
+	if (data::pos_cursor.y + data::down_pos_limit
+			> data::text_location.second.y + data::shift)
 		data::shift++;
 }
 
@@ -187,6 +156,16 @@ void right_pos()
 		data::pos_cursor.x++;
 }
 
+void limit_left_pos()
+{
+	data::pos_cursor.x = 1;
+}
+
+void limit_right_pos()
+{
+	data::pos_cursor.x = data::text[data::pos_cursor.y - 1].size() + 2;
+}
+
 inline void terminate()
 {
 	data::interactive.final();
@@ -196,28 +175,27 @@ void add(int ch)
 {
 	switch(ch) {
 	case 127: // backspace
-		data::text[data::pos_cursor.y - 1].erase(
-				data::text[data::pos_cursor.y - 1].begin()
-				+ data::pos_cursor.x - 2);
+		if (!data::text[data::pos_cursor.y - 1].empty())
+			data::text.remove( { data::pos_cursor.x - 2, data::pos_cursor.y - 1 } );
+		else {
+			data::text.rm_ln(data::pos_cursor.y - 1);
+			up_pos();
+			limit_right_pos();
+		}
 		left_pos();
 		break;
 	case 9: // tab
-		for(int i = 2; i-->0;) {
-			data::text[data::pos_cursor.y - 1].insert(
-					data::text[data::pos_cursor.y - 1].begin()
-					+ data::pos_cursor.x - 1, { ' ' } );
+		for(int i = data::tab_size; i-->0;) {
+			data::text.add( { data::pos_cursor.x - 1, data::pos_cursor.y - 1}, ' ');
 			right_pos();
 		}
 		break;
-	case 10: // enter // don't work?
-		//data::text.insert(
-		//		data::text.begin() + data::pos_cursor.y,
-		//		{ } );
+	case 10: // enter
+		data::text.new_ln(data::pos_cursor.y);
+		down_pos();
 		break;
 	default:
-		data::text[data::pos_cursor.y - 1].insert(
-				data::text[data::pos_cursor.y - 1].begin()
-				+ data::pos_cursor.x - 1, { ch } );
+		data::text.add( { data::pos_cursor.x - 1, data::pos_cursor.y - 1}, ch);
 		right_pos();
 
 		// keycode test
@@ -234,26 +212,25 @@ void insert(int ch)
 {
 	switch(ch) {
 	case 127: // backspace
-		data::text[data::pos_cursor.y - 1].erase(
-				data::text[data::pos_cursor.y - 1].begin()
-				+ data::pos_cursor.x - 2);
+		if (!data::text[data::pos_cursor.y - 1].empty())
+			data::text.remove( { data::pos_cursor.x - 2, data::pos_cursor.y - 1 } );
 		left_pos();
 		break;
 	case 9: // tab
-		for(int i = 2; i-->0;) {
-			data::text[data::pos_cursor.y - 1]
-				[data::pos_cursor.x - 1] = { ' ' };
+		for(int i = data::tab_size; i-->0;) {
+		data::text.replace(
+				{ data::pos_cursor.x - 1, data::pos_cursor.y - 1 }, ' ');
 			right_pos();
 		}
 		break;
-	case 10: // enter // don't work?
-		//data::text.insert(
-		//		data::text.begin() + data::pos_cursor.y,
-		//		{ } );
+	case 10: // enter
+		data::text.new_ln(data::pos_cursor.y);
+		down_pos();
 		break;
 	default:
-		data::text[data::pos_cursor.y - 1]
-			[data::pos_cursor.x - 1].ch = ch;
+		if (!data::text[data::pos_cursor.y - 1].empty())
+			data::text.replace(
+					{ data::pos_cursor.x - 1, data::pos_cursor.y - 1 }, ch );
 		right_pos();
 
 		// keycode test
@@ -264,6 +241,15 @@ void insert(int ch)
 
 		break;
 	}
+}
+
+void term_read(const char* chs)
+{
+	/*
+	 * считать посимвольно с тек. позиц. курсора до пробела
+	*/
+
+	//struc::Coord
 }
 
 } // funcs

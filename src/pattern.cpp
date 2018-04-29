@@ -92,6 +92,8 @@ public:
 	Store(T previous, T current)
 		: _previous(previous), _current(current) { }
 
+	Store(T val) : _previous(val), _current(val) { }
+
 	inline void store()
 		{ _previous = _current; }
 
@@ -118,6 +120,8 @@ public:
 		friend U operator - (auto u, Store<U> store);
 	template<typename U>
 		friend U operator - (Store<U> store, auto u);
+	template<typename U>
+		friend bool operator > (Store<U> store, auto u);
 };
 
 template<typename T>
@@ -126,7 +130,7 @@ T operator + (auto t, Store<T> store)
 
 template<typename T>
 T operator + (Store<T> store, auto t)
-	{ return t + store._current; }
+	{ return store._current + t; }
 
 template<typename T>
 T operator - (auto t, Store<T> store)
@@ -134,7 +138,11 @@ T operator - (auto t, Store<T> store)
 
 template<typename T>
 T operator - (Store<T> store, auto t)
-	{ return t - store._current; }
+	{ return store._current - t; }
+
+template<typename T>
+bool operator > (Store<T> store, auto t)
+	{ return store._current > t; }
 
 } // pattern
 } // _e

@@ -5,6 +5,7 @@ namespace _e {
 namespace interact {
 
 int c = 0;
+const char* cstr;
 
 void flash_hello_f();
 void hello_f();
@@ -12,15 +13,15 @@ void flash_view_f();
 void view_f();
 void flash_edit_f();
 void edit_f();
-void flash_insert_f();
-void insert_f();
+void flash_replace_f();
+void replace_f();
 void flash_enter_f();
 void enter_f();
 
 pattern::Flash hello(flash_hello_f, hello_f);
 pattern::Flash view(flash_view_f, view_f);
 pattern::Flash edit(flash_edit_f, edit_f);
-pattern::Flash insert(flash_insert_f, insert_f);
+pattern::Flash replace(flash_replace_f, replace_f);
 pattern::Flash enter(flash_enter_f, enter_f);
 
 void flash_view_f()
@@ -50,16 +51,16 @@ void view_f()
 				case '5':
 					c = getchar();
 					if (c == '~') // pg_up
-						for(int i=10;i-->0;) func::up_pos(); break;
+						for(int i = data::page_step; i-->0;) func::up_pos(); break;
 				case '6':
 					c = getchar();
 					if (c == '~') // pg_down
-						for(int i=10;i-->0;) func::down_pos(); break;
+						for(int i = data::page_step ;i-->0;) func::down_pos(); break;
 			}
 		}
 	} else switch(c) {
 		case 'e': data::interactive(edit); break;
-		case 'i': data::interactive(insert); break;
+		case 'r': data::interactive(replace); break;
 		case ':': 
 			flash_enter_f();
 			enter_f();
@@ -100,15 +101,17 @@ void edit_f()
 				case '5':
 					c = getchar();
 					if (c == '~') // pg_up
-						for(int i=10;i-->0;) func::up_pos(); break;
+						for(int i = data::page_step; i-->0;) func::up_pos(); break;
 				case '6':
 					c = getchar();
 					if (c == '~') // pg_down
-						for(int i=10;i-->0;) func::down_pos(); break;
+						for(int i = data::page_step; i-->0;) func::down_pos(); break;
 			}
 		} else data::interactive(view); // если только esc
-	} else
+	} else {
 		func::add(c);
+		highlight::update();
+	}
 
 	term::hide_cursor();	
 	func::redraw_text_view();
@@ -116,10 +119,10 @@ void edit_f()
 	term::show_cursor();
 }
 
-void flash_insert_f()
+void flash_replace_f()
 {
 	term::hide_cursor();
-	data::status_bar = lang::mode_insert.c_str();
+	data::status_bar = lang::mode_replace.c_str();
 	term::move_cursor(2, data::term_size.y);
 	term::format(term::Format::bright);
 	term::fg_color(term::Fg_color::red);
@@ -128,7 +131,7 @@ void flash_insert_f()
 	func::clear_previous_status();
 }
 
-void insert_f()
+void replace_f()
 {
 	c = getchar();
 	if (c == 27) /* esc */ {
@@ -150,8 +153,10 @@ void insert_f()
 						for(int i=10;i-->0;) func::down_pos(); break;
 			}
 		} else data::interactive(view); // если только esc
-	} else
+	} else {
 		func::insert(c);
+		highlight::update();
+	}
 
 	term::hide_cursor();	
 	func::redraw_text_view();
@@ -175,6 +180,12 @@ void enter_f()
 	term::show_cursor();
 	c = getchar();
 
+	//func::clear_all();
+	//term::move_cursor(1, 1);
+	//term::format(term::Format::reset);
+	//putc(cstr[0], stdout);
+	//sleep(1);
+
 	if (c == 'q') func::terminate();
 
 	term::hide_cursor();	
@@ -194,9 +205,9 @@ void hello_f()
 
 	std::array<const char*, 6> message {
 		"_e - terminal editor." ,
-		"e - edit, i - insert," ,
+		"e - edit, r - replace," ,
 		"v - visual, esc - view," ,
-		": - command mode," ,
+		": - command mode, / - find," ,
 		"c - copy, p - paste." ,
 		"Press any key to continue."
 	};
