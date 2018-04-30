@@ -20,6 +20,12 @@ std::vector<Keyword> keywords {
 	{ "switch",    { term::Bg_color::black, term::Fg_color::yellow } },
 	{ "case",      { term::Bg_color::black, term::Fg_color::yellow } },
 	{ "inline",    { term::Bg_color::black, term::Fg_color::yellow } },
+	{ "const",     { term::Bg_color::black, term::Fg_color::yellow } },
+	{ "constexpr", { term::Bg_color::black, term::Fg_color::yellow } },
+	{ "mutable",   { term::Bg_color::black, term::Fg_color::yellow } },
+	{ "template",  { term::Bg_color::black, term::Fg_color::yellow } },
+	{ "typename",  { term::Bg_color::black, term::Fg_color::yellow } },
+	{ "goto",      { term::Bg_color::black, term::Fg_color::yellow } },
 	
 	{ "void",      { term::Bg_color::black, term::Fg_color::green } },
 	{ "char",      { term::Bg_color::black, term::Fg_color::green } },
@@ -27,8 +33,12 @@ std::vector<Keyword> keywords {
 	{ "float",     { term::Bg_color::black, term::Fg_color::green } },
 	{ "double",    { term::Bg_color::black, term::Fg_color::green } },
 	{ "size_t",    { term::Bg_color::black, term::Fg_color::green } },
+	{ "auto",      { term::Bg_color::black, term::Fg_color::green } },
 	
 	{ "main",      { term::Bg_color::black, term::Fg_color::magenta } },
+	{ "cout",      { term::Bg_color::black, term::Fg_color::magenta } },
+	{ "cin",       { term::Bg_color::black, term::Fg_color::magenta } },
+	{ "std",       { term::Bg_color::black, term::Fg_color::magenta } },
 
 	{ "#include",  { term::Bg_color::black, term::Fg_color::cyan } },
 	{ "#define",   { term::Bg_color::black, term::Fg_color::cyan } },
@@ -56,6 +66,13 @@ std::vector<Operator> operators {
 	{ ".", { term::Bg_color::black, term::Fg_color::red } },
 	{ ";", { term::Bg_color::black, term::Fg_color::red } },
 };
+
+void clear()
+{
+	for(auto& line : data::text)
+	for(auto& cl_ch : line)
+		cl_ch.colors = { term::Bg_color::black, term::Fg_color::white };
+}
 
 void keywords_f()
 {
@@ -85,6 +102,7 @@ void operators_f()
 
 void update()
 {
+	clear();
 	keywords_f();
 	operators_f();
 }

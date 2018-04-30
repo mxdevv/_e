@@ -36,7 +36,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 
 	inline void new_ln()
-		{ data.push_back( { } ); }
+		{ data.push_back( *new value_type() ); }
 
 	inline void new_ln(size_t i)
 		{ data.insert(data.begin() + i, std::move(*new value_type()) ); }

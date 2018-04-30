@@ -40,6 +40,14 @@ constexpr unsigned int hash(const char* chs)
 	return hash;
 }
 
+unsigned int hash(std::string str)
+{
+	unsigned int hash = 0;
+	for(int i = 0; i < str.size(); i++)
+		hash += (unsigned int)str[i] * pow(31, i);
+	return hash;
+}
+
 /*std::vector<int> substr(const char* sampl, const char* sourc)
 {
 	int i = 0, j = 0;

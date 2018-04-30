@@ -12,15 +12,13 @@ constexpr bool is_alpha(char ch) {
 constexpr bool is_digit(char ch)
 	{ return (ch >= '0' && ch <= '9'); }
 
-constexpr bool is_alpha_or_digit(char ch)
-{
+constexpr bool is_alpha_or_digit(char ch) {
 	return ((ch >= 'a' && ch <= 'z')
 			||  (ch >= 'A' && ch <= 'Z')
 			||  (ch >= '0' && ch <= '9'));
 }
 
-constexpr bool is_literal(char ch)
-{
+constexpr bool is_literal(char ch) {
 	return ((ch >= 'a' && ch <= 'z')
 			||  (ch >= 'A' && ch <= 'Z')
 			||  (ch == '_')

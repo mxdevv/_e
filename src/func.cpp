@@ -53,6 +53,7 @@ void redraw_text_view()
 			putc(data::text[i][j].ch, stdout);
 		}
 	}
+	term::format(term::Format::reset);
 	for(int i = data::text.size() - data::shift;
 			i <= data::text_location.second.y; i++)
 	{
@@ -113,6 +114,22 @@ void open_or_create()
 	data::ifs.close();
 }
 
+void save()
+{
+	data::ofs.open(data::file_name);
+
+	for(int i = 0; i < data::text.size() - 1; i++) {
+		for(int j = 0; j < data::text[i].size(); j++)
+			data::ofs << data::text[i][j].ch;
+		data::ofs << '\n';
+	}
+
+	for(int i = 0; i < data::text[data::text.size() - 1].size(); i++)
+		data::ofs << data::text[data::text.size() - 1][i].ch;
+
+	data::ofs.close();
+}
+
 void help()
 {
 	fputs(lang::help.c_str(), stdout);
@@ -142,6 +159,19 @@ void down_pos()
 	if (data::pos_cursor.y + data::down_pos_limit
 			> data::text_location.second.y + data::shift)
 		data::shift++;
+}
+
+void move_pos(struc::Coord coord)
+{
+	if (coord.y - data::pos_cursor.y > 0)
+		for(int i = coord.y - data::pos_cursor.y; i --> 0;)
+			down_pos();
+	else
+		for(int i = data::pos_cursor.y - coord.y; i --> 0;)
+			up_pos();
+
+	data::pos_cursor.x = coord.x;
+	correct_x();
 }
 
 void left_pos()
@@ -243,14 +273,50 @@ void insert(int ch)
 	}
 }
 
-void term_read(const char* chs)
+/*void term_read(const char* chs)
 {
-	/*
-	 * считать посимвольно с тек. позиц. курсора до пробела
-	*/
+	
+	 считать посимвольно с тек. позиц. курсора до пробела
+	
 
 	//struc::Coord
+}*/
+
+using value_ret_t = std::vector<struc::Color_ch>;
+using ret_t = std::vector<value_ret_t>;
+ret_t* copy(int y1, int y2)
+{
+	ret_t* ret = new ret_t();
+	for(int i = y1; i <= y2; i++)
+	{
+		ret->push_back( *new value_ret_t() );
+		for(int j = 0; j < data::text[i].size(); j++)
+		{
+			ret->back().push_back(data::text[i][j]);
+		}
+	}
+	return ret;
 }
+
+void paste(int y, ret_t* ret)
+{
+	for(int i = ret->size(); i --> 0;) {
+		data::text.new_ln(y);
+		for(auto& el : (*ret)[i])
+		{
+			data::text[y].push_back(el);
+		}
+	}
+}
+
+void remove(int y1, int y2)
+{
+	for(int i = y1; i <= y2; i++)
+		data::text.rm_ln(y1);
+}
+
+inline void remove(int y)
+	{ data::text.rm_ln(y); }
 
 } // funcs
 } // _e
