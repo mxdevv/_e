@@ -2,3 +2,5 @@
 _e - terminal editor for linux.
 
 Warning, do not use for practical tasks. This programming is at leisure.
+
+Third-party libraries are not used.
