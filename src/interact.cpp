@@ -299,12 +299,6 @@ void enter_f()
 	term::show_cursor();
 	std::cin >> str; // о боже нет, со временем отказаться от потоков!!!
 
-	//func::clear_all();
-	//term::move_cursor(1, 1);
-	//term::format(term::Format::reset);
-	//putc(cstr[0], stdout);
-	//sleep(1);
-
 	switch(alg::hash(str)) {
 		case alg::hash("q"): func::terminate(); break;
 		case alg::hash("w"): func::save(); break;

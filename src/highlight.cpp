@@ -77,43 +77,30 @@ void clear()
 		cl_ch.colors = { term::Bg_color::black, term::Fg_color::white };
 }
 
-/*std::vector<int> substr(const char* sampl, std::vector<struc::Color_ch>& sourc)
-{
-	int i = 0, j = 0;
-	std::vector<int> v;
-	for(; sourc.size() > j; j++)
-	{
-		if (sampl[i] == sourc[j].ch) {
-			i++;
-			if (sampl[i] == '\0') {
-				v.push_back(j);
-				i = 0;
-			}
-		} else i = 0;
-	}
-	return v;
-}*/
-
 void numbers_f()
 {
 	for(auto& line : data::text)
 	{
 		std::vector<int> v;
+		std::vector<int> l;
 
 		int i = 0, j = 0;
 		for(; line.size() > j; j++)
 			if (parse::is_digit(line[j].ch)) {
 				i++;
-				if (i != 0 && !parse::is_digit(line[i].ch))
+				if (i != 0 && !parse::is_digit(line[j + 1].ch))
 				{
 					v.push_back(j);
+					l.push_back(i);
 					i = 0;
 				}
 			} else i = 0;
 
-		for(auto& el : v)
-		for(size_t i = 1 /* ??? */; i --> 0;)
-			line[el - i].colors = { term::Bg_color::black, term::Fg_color::blue };
+		for(int k = 0; k < v.size(); k++)
+		if (!parse::is_literal(line[v[k] - l[k]].ch)
+				&& !parse::is_literal(line[v[k] + 1].ch))
+			for(int i = l[k]; i --> 0;)
+				line[v[k] - i].colors = { term::Bg_color::black, term::Fg_color::blue };
 	}
 }
 

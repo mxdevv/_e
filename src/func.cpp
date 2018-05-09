@@ -227,13 +227,6 @@ void add(int ch)
 	default:
 		data::text.add( { data::pos_cursor.x - 1, data::pos_cursor.y - 1}, ch);
 		right_pos();
-
-		// keycode test
-		/*func::clear_all();
-		term::format(term::Format::reset);
-		std::cout << ch;
-		sleep(1);*/
-
 		break;
 	}
 }
@@ -262,25 +255,9 @@ void insert(int ch)
 			data::text.replace(
 					{ data::pos_cursor.x - 1, data::pos_cursor.y - 1 }, ch );
 		right_pos();
-
-		// keycode test
-		/*func::clear_all();
-		term::format(term::Format::reset);
-		std::cout << ch;
-		sleep(1);*/
-
 		break;
 	}
 }
-
-/*void term_read(const char* chs)
-{
-	
-	 считать посимвольно с тек. позиц. курсора до пробела
-	
-
-	//struc::Coord
-}*/
 
 using value_ret_t = std::vector<struc::Color_ch>;
 using ret_t = std::vector<value_ret_t>;
