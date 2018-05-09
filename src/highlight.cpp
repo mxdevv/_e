@@ -7,7 +7,7 @@ namespace highlight {
 struct Keyword { const char* word; struc::Colors colors; };
 struct Operator { const char* word; struc::Colors colors; };
 
-std::vector<Keyword> keywords {
+const std::vector<Keyword> keywords {
 	{ "using",     { term::Bg_color::black, term::Fg_color::yellow } },
 	{ "namespace", { term::Bg_color::black, term::Fg_color::yellow } },
 	{ "return",    { term::Bg_color::black, term::Fg_color::yellow } },
@@ -26,6 +26,7 @@ std::vector<Keyword> keywords {
 	{ "template",  { term::Bg_color::black, term::Fg_color::yellow } },
 	{ "typename",  { term::Bg_color::black, term::Fg_color::yellow } },
 	{ "goto",      { term::Bg_color::black, term::Fg_color::yellow } },
+	{ "new",       { term::Bg_color::black, term::Fg_color::yellow } },
 	
 	{ "void",      { term::Bg_color::black, term::Fg_color::green } },
 	{ "char",      { term::Bg_color::black, term::Fg_color::green } },
@@ -48,7 +49,7 @@ std::vector<Keyword> keywords {
 	{ "#endif",    { term::Bg_color::black, term::Fg_color::cyan } },
 };
 
-std::vector<Operator> operators {
+const std::vector<Operator> operators {
 	{ "<", { term::Bg_color::black, term::Fg_color::red } },
 	{ ">", { term::Bg_color::black, term::Fg_color::red } },
 	{ "[", { term::Bg_color::black, term::Fg_color::red } },
@@ -58,7 +59,9 @@ std::vector<Operator> operators {
 	{ "=", { term::Bg_color::black, term::Fg_color::red } },
 	{ ":", { term::Bg_color::black, term::Fg_color::red } },
 	{ "!", { term::Bg_color::black, term::Fg_color::red } },
+	{ "|", { term::Bg_color::black, term::Fg_color::red } },
 	{ "*", { term::Bg_color::black, term::Fg_color::red } },
+	{ "&", { term::Bg_color::black, term::Fg_color::red } },
 	{ "/", { term::Bg_color::black, term::Fg_color::red } },
 	{ "+", { term::Bg_color::black, term::Fg_color::red } },
 	{ "-", { term::Bg_color::black, term::Fg_color::red } },
@@ -72,6 +75,46 @@ void clear()
 	for(auto& line : data::text)
 	for(auto& cl_ch : line)
 		cl_ch.colors = { term::Bg_color::black, term::Fg_color::white };
+}
+
+/*std::vector<int> substr(const char* sampl, std::vector<struc::Color_ch>& sourc)
+{
+	int i = 0, j = 0;
+	std::vector<int> v;
+	for(; sourc.size() > j; j++)
+	{
+		if (sampl[i] == sourc[j].ch) {
+			i++;
+			if (sampl[i] == '\0') {
+				v.push_back(j);
+				i = 0;
+			}
+		} else i = 0;
+	}
+	return v;
+}*/
+
+void numbers_f()
+{
+	for(auto& line : data::text)
+	{
+		std::vector<int> v;
+
+		int i = 0, j = 0;
+		for(; line.size() > j; j++)
+			if (parse::is_digit(line[j].ch)) {
+				i++;
+				if (i != 0 && !parse::is_digit(line[i].ch))
+				{
+					v.push_back(j);
+					i = 0;
+				}
+			} else i = 0;
+
+		for(auto& el : v)
+		for(size_t i = 1 /* ??? */; i --> 0;)
+			line[el - i].colors = { term::Bg_color::black, term::Fg_color::blue };
+	}
 }
 
 void keywords_f()
@@ -103,6 +146,7 @@ void operators_f()
 void update()
 {
 	clear();
+	numbers_f();
 	keywords_f();
 	operators_f();
 }
